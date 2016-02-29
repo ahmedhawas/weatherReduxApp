@@ -20,7 +20,12 @@ export default class SearchBar extends Component {
   _handleFormSubmit(event) {
     event.preventDefault();
     // fetch weather data
-    this.props.fetchWeather(this.state.term);
+    const searchTerms = this.state.term.split(",");
+    if (searchTerms.length > 1) {
+      this.props.fetchWeather(searchTerms[0], searchTerms[1]);
+    } else {
+      this.props.fetchWeather(searchTerms[0], '');
+    }
     this.setState({term: ''});
   }
 
@@ -28,7 +33,8 @@ export default class SearchBar extends Component {
     return (
       <form onSubmit={this._handleFormSubmit} className="input-group">
         <input
-          placeholder="Get a 5 day forecast for your favourite cities"
+          className="form-control"
+          placeholder="Get a 5 day forecast for your favourite cities (city, country)"
           value={this.state.term}
           onChange={this._handleInputChange}/>
         <span className="input-group-btn">
